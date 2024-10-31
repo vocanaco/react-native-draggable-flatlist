@@ -6,7 +6,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { ListRenderItem, FlatListProps, LayoutChangeEvent } from "react-native";
+import { FlatListProps, LayoutChangeEvent, ListRenderItem } from "react-native";
 import {
   FlatList,
   Gesture,
@@ -19,21 +19,21 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from "react-native-reanimated";
-import CellRendererComponent from "./CellRendererComponent";
-import { DEFAULT_PROPS, isWeb } from "../constants";
-import PlaceholderItem from "./PlaceholderItem";
-import RowItem from "./RowItem";
-import { DraggableFlatListProps } from "../types";
-import PropsProvider from "../context/propsContext";
+import { DEFAULT_PROPS } from "../constants";
 import AnimatedValueProvider, {
   useAnimatedValues,
 } from "../context/animatedValueContext";
-import RefProvider, { useRefs } from "../context/refContext";
 import DraggableFlatListProvider from "../context/draggableFlatListContext";
+import PropsProvider from "../context/propsContext";
+import RefProvider, { useRefs } from "../context/refContext";
 import { useAutoScroll } from "../hooks/useAutoScroll";
 import { useStableCallback } from "../hooks/useStableCallback";
-import ScrollOffsetListener from "./ScrollOffsetListener";
+import { DraggableFlatListProps } from "../types";
 import { typedMemo } from "../utils";
+import CellRendererComponent from "./CellRendererComponent";
+import PlaceholderItem from "./PlaceholderItem";
+import RowItem from "./RowItem";
+import ScrollOffsetListener from "./ScrollOffsetListener";
 
 type RNGHFlatListProps<T> = Animated.AnimateProps<
   FlatListProps<T> & {
@@ -295,7 +295,7 @@ function DraggableFlatListInner<T>(props: DraggableFlatListProps<T>) {
       const springTo = placeholderOffset.value - activeCellOffset.value;
       touchTranslate.value = withSpring(
         springTo,
-        animationConfigRef.current,
+        animationConfigRef.value,
         () => {
           runOnJS(onDragEnd)({
             from: activeIndexAnim.value,
